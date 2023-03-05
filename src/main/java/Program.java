@@ -4,21 +4,6 @@ public class Program {
 
     public static void main(String[] args) {
 
-        try(FileWriter writer = new FileWriter("file.txt", false))
-        {
-
-            String text = "987-123-4567";
-            writer.write(text);
-            writer.append('\n');
-            writer.append("123 456 7890");
-            writer.append('\n');
-            writer.append("(123) 456-7890");
-            writer.flush();
-        }
-        catch(IOException ex){
-
-            System.out.println(ex.getMessage());
-        }
 
         try(FileReader reader = new FileReader("file.txt"))
         {
