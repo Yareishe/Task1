@@ -16,20 +16,54 @@ class GsonTest {
             System.out.println(values);
         }
         String[] titles = values.get(0).split(" ");
-        String[] values1 = values.get(1).split(" ");
-        String[] values2 = values.get(2).split(" ");
-        String result = "[\n" +
-                "    {\n" +
-                "        \"" + titles[0] + "\": \"" + values1[0] + "\",\n" +
-                "        \"" + titles[1] + "\": " + values1[1] + "\n" +
-                "    },\n" +
-                "    {\n" +
-                "        \"" + titles[0] + "\": \"" + values2[0] + "\",\n" +
-                "        \"" + titles[1] + "\": " + values2[1] + "\n" +
-                "    }\n" +
-                "]";
+        int size = values.size();
+        StringBuilder result = new StringBuilder("[\n");
+        for (int i = 1; i < size; i++) {
+             if(size == 2) {
+                String[] values1 = values.get(1).split(" ");
+                result.append("    {\n" + "        \"")
+                        .append(titles[0])
+                        .append("\": \"")
+                        .append(values1[0])
+                        .append("\",\n")
+                        .append("        \"")
+                        .append(titles[1])
+                        .append("\": ")
+                        .append(values1[1])
+                        .append("\n")
+                        .append("    }\n");
+            }
+            else {
+                String[] values1 = values.get(i).split(" ");
+               result.append("    {\n" + "        \"")
+                       .append(titles[0])
+                       .append("\": \"")
+                       .append(values1[0])
+                       .append("\",\n")
+                       .append("        \"")
+                       .append(titles[1])
+                       .append("\": ")
+                       .append(values1[1])
+                       .append("\n")
+                       .append("    },\n");
+            }
+        }
+        result.append("]");
+        result = new StringBuilder(result.toString().replace(",\n]", "\n]"));
+//        String[] values1 = values.get(1).split(" ");
+//        String[] values2 = values.get(2).split(" ");
+//        result = "[\n" +
+//                "    {\n" +
+//                "        \"" + titles[0] + "\": \"" + values1[0] + "\",\n" +
+//                "        \"" + titles[1] + "\": " + values1[1] + "\n" +
+//                "    },\n" +
+//                "    {\n" +
+//                "        \"" + titles[0] + "\": \"" + values2[0] + "\",\n" +
+//                "        \"" + titles[1] + "\": " + values2[1] + "\n" +
+//                "    }\n" +
+//                "]";
         try (FileWriter writer = new FileWriter("user.json", false)) {
-            writer.write(result);
+            writer.write(result.toString());
 
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
