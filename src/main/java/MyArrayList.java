@@ -1,49 +1,68 @@
 import java.util.Arrays;
 
-public class MyArrayList {
-    int filledCount = 0 ;
-    Object [] array = new Object[11];
+public class MyArrayList<T> {
+    int filledCount = 0;
+    Object[] array = new Object[11];
 
     public static void main(String[] args) {
-        MyArrayList deliveryCities = new MyArrayList();
-        deliveryCities.add("Cekago");
-        deliveryCities.remove(9);
+        MyArrayList<String> deliveryCities = new MyArrayList<>();
+        deliveryCities.add("Cekago0");
+        deliveryCities.add("Cekago1");
+        deliveryCities.add("Cekago2");
+        deliveryCities.add("Cekago3");
+        deliveryCities.add("Cekago4");
+        deliveryCities.add("Cekago5");
+        deliveryCities.add("Cekago6");
+        deliveryCities.add("Cekago7");
+        deliveryCities.add("Cekago8");
+        deliveryCities.add("Cekago9");
+        deliveryCities.remove(6);
+        System.out.println(deliveryCities);
         deliveryCities.clear();
         deliveryCities.size();
-        deliveryCities.get(9);
+        deliveryCities.get(8);
     }
 
-    boolean add(Object value) {
+    boolean add(T value) {
 
         if (array.length - 1 == filledCount) {
-            Object[] array2 = new Object[array.length+10];
-            System.arraycopy(array,0,array2,0, array.length );
+            Object[] array2 = new Object[array.length + 10];
+            System.arraycopy(array, 0, array2, 0, array.length);
             array = array2;
         }
 
-            array[filledCount]=value;
+        array[filledCount] = value;
 
         filledCount++;
-
-
-        System.out.println(Arrays.toString(array));
-     return true;
-    }
-    boolean remove(int index){
-        array[index] = null;
-        System.out.println((Arrays.toString(array)));
         return true;
     }
-    void clear(){
-        array = new Object[array.length];
-        System.out.println((Arrays.toString(array)));
+
+    boolean remove(int index) {
+        Object[] result = new Object[array.length - 2];
+        System.arraycopy(array, 0, result, 0, index);
+        System.arraycopy(array, index + 1, result, index, array.length - index - 2);
+        array = result;
+        filledCount--;
+        return true;
     }
-    int size(){
-        System.out.println(array.length);
-        return array.length;
+
+    void clear() {
+        array = new Object[filledCount];
     }
-    Object get(int index){
-        System.out.println(array[index]);
-        return array[index];
+
+    int size() {
+        return filledCount;
+    }
+
+    T get(int index) {
+        return (T) array[index];
+    }
+
+    @Override
+    public String toString() {
+        return "MyArrayList{" +
+                "filledCount=" + filledCount +
+                ", array=" + Arrays.toString(array) +
+                '}';
     }
 }
