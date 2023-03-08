@@ -1,32 +1,31 @@
-public class MyLinkedList {
+public class MyLinkedList<F> {
 
     public static void main(String[] args) {
-        MyLinkedList deliveryCities  = new MyLinkedList();
+        MyLinkedList<String> deliveryCities  = new MyLinkedList<>();
         deliveryCities.clear();
         deliveryCities.add("Cekago");
         deliveryCities.add("Cekago1");
         deliveryCities.add("Cekago2");
         deliveryCities.add("Cekago3");
         deliveryCities.add("Cekago4");
-        System.out.println(deliveryCities);
         deliveryCities.remove(0);
         deliveryCities.add("Cekago5");
         System.out.println(deliveryCities.size());
         System.out.println(deliveryCities.get(1));
     }
-    static class Node {
+    class Node {
         Node next;
         Node prev;
-        Object data;
-        public Node(Object data) {
+        F data;
+        public Node(F data) {
             this.data = data;
         }
 
-        public static Node clone(Node node) {//needed for delete looping
+        public Node clone(Node node) {//needed for delete looping
             return new Node(node.getData());
         }
 
-        public Object getData() {
+        public F getData() {
             return data;
         }
 
@@ -41,7 +40,7 @@ public class MyLinkedList {
     }
     Node root = new Node(null);
 
-    public boolean add(Object value) {
+    public boolean add(F value) {
         Node newNode = new Node(value);
         Node last = root;
         while (last.next != null) {
@@ -49,7 +48,8 @@ public class MyLinkedList {
         }
         last.next = newNode;
         if (size() > 1) {
-            last.next.prev = Node.clone(last);
+            Node node = new Node(null);
+            last.next.prev = node.clone(last);
         }
         return true;
     }
@@ -60,7 +60,8 @@ public class MyLinkedList {
         while (node.next != null) {
             if(index == i && size() > 2){
                 if(node.next.prev == null){
-                    node.next.prev = Node.clone(root);
+                    Node nodeClone = new Node(null);
+                    node.next.prev = nodeClone.clone(root);
                 }
                 node.next.next.prev = node.next.prev;
                 node.next = node.next.next;
@@ -83,17 +84,17 @@ public class MyLinkedList {
         }
         return size;
     }
-    Object get(int index){
+    F get(int index){
         Node node = root;
         Node result = null;
         int size = 0;
         while (node.next != null) {
             if(index == size){
-                result = node;
+                result  = node;
             }
             size++;
             node = node.next;
         }
-        return result;
+        return result.getData();
     }
 }
