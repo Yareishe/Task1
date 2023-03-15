@@ -11,7 +11,7 @@ public class MyLinkedList<F> {
         deliveryCities.remove(0);
         deliveryCities.add("Cekago5");
         System.out.println(deliveryCities.size());
-        System.out.println(deliveryCities.get(1));
+        System.out.println(deliveryCities.get(4));
     }
     class Node {
         Node next;
@@ -58,7 +58,7 @@ public class MyLinkedList<F> {
         Node node = root;
         int i = 0;
         while (node.next != null) {
-            if(index == i && size() > 2){
+            if(index == i && size() > 2) {
                 if(node.next.prev == null){
                     Node nodeClone = new Node(null);
                     node.next.prev = nodeClone.clone(root);
@@ -84,17 +84,19 @@ public class MyLinkedList<F> {
         }
         return size;
     }
-    F get(int index){
+    F get(int index) {
         Node node = root;
-        Node result = null;
-        int size = 0;
+        int count = 0;
         while (node.next != null) {
-            if(index == size){
-                result  = node;
+            if (index == 0) {
+                node = root.next;
+                break;
+            } else if (index + 1 == count) {
+                break;
             }
-            size++;
+            count++;
             node = node.next;
         }
-        return result.getData();
+        return node.getData();
     }
 }
