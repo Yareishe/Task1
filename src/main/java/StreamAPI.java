@@ -9,24 +9,16 @@ class StreamAPI {
     public static void main(String[] args) {
         String[] name = {"g","b","a","k","l"};
         String[] odd = new StreamAPI().odd(name);
-        System.out.println(1);
         System.out.println(Arrays.toString(odd));
         String[] ABC = new StreamAPI().ABC(odd);
         String[] number = {"1, 2, 0", "4, 5"};
         String numbers = new StreamAPI().numbers(number);
-        System.out.println(22);
         System.out.println(Arrays.toString(ABC));
-        System.out.println(333);
         System.out.println(numbers);
-        Stream<Long> formula = new StreamAPI().formula(1L);
-
-
-
+        formula(1234L).limit(10).forEach(System.out::println);
         Stream<Integer> stream1 = Stream.of(1, 2, 3, 4, 5);
-        Stream<Integer> stream2 = Stream.of(6, 7, 8, 9, 10, 11);
-        System.out.println(55555);
+        Stream<Integer> stream2 = Stream.of(6, 7, 8, 9, 10, 11, 12, 13, 14);
         zip(stream1, stream2).forEach(System.out::println);
-
         }
 
     public String[] odd(String[] name){
@@ -90,6 +82,9 @@ class StreamAPI {
         while (iterator1.hasNext() && iterator2.hasNext()) {
             result.add(iterator1.next());
             result.add(iterator2.next());
+            if (!iterator1.hasNext() || !iterator2.hasNext()) {
+                break;
+            }
         }
         return result.stream();
     }
