@@ -1,16 +1,13 @@
 import java.util.Arrays;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 import java.util.*;
 import java.util.stream.Stream;
-
+import java.util.List;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 class StreamAPI {
     public static void main(String[] args) {
         String[] name = {"g","b","a","k","l"};
-        String[] odd = new StreamAPI().odd(name);
-        System.out.println(Arrays.toString(odd));
-        String[] ABC = new StreamAPI().ABC(odd);
+        String[] ABC = new StreamAPI().ABC(name).toArray(new String[0]);
         String[] number = {"1, 2, 0", "4, 5"};
         String numbers = new StreamAPI().numbers(number);
         System.out.println(Arrays.toString(ABC));
@@ -21,38 +18,13 @@ class StreamAPI {
         zip(stream1, stream2).forEach(System.out::println);
         }
 
-    public String[] odd(String[] name){
-        int J = 0;
-        for (int i = 0; i < name.length; i++) {
-            if(i % 2 == 0){
-                J++;
-            }
-        }
-        String[] names = new String[J];
-        int a = 0;
-        for (int i = 0; i < name.length; i++) {
-            if(i % 2 == 0){
-                names[a] = name[i];
-                a++;
-            }
-        }
-        return names;
-    }
-    public String[] ABC(String[] odd){
-        Map<String,String> details =new TreeMap<>(Collections.reverseOrder());
-        for (int i = 0; i < odd.length; i++) {
-            details.put(odd[i],odd[i]);
-        }
-        Set set = details.entrySet();
-        Iterator d = set.iterator();
-        int b = 0;
-        while (d.hasNext()) {
-            Map.Entry me = (Map.Entry)d.next();
-            odd[b] = (String) me.getValue();
-            b++;
-        }
-        
-        return odd;
+    public List<String> ABC(String[] odd){
+        List<String> names = Arrays.asList(odd);
+        List<String> sortedUpperNames = names.stream()
+                .filter(n -> names.indexOf(n) % 2 == 0)
+                .sorted(Comparator.reverseOrder())
+                .collect(Collectors.toList());
+        return sortedUpperNames;
     }
     public String numbers(String[] odd){
         List<Integer> sorted = Arrays.stream(
