@@ -27,18 +27,13 @@ class StreamAPI {
         return sortedUpperNames;
     }
     public String numbers(String[] odd){
-        List<Integer> sorted = Arrays.stream(
-                        Arrays.toString(odd)
-                                .replace("[", "")
-                                .replace("]", "")
-                                .replace(" ", "")
-                                .split(",")
-                )
-                .map(Integer::parseInt)
+        String sortedNumbers = Arrays.stream(odd)
+                .flatMap(s -> Arrays.stream(s.split(",\\s*")))
+                .map(String::trim)
                 .sorted()
-                .toList();
+                .collect(Collectors.joining(", "));
 
-        return sorted.toString().replace("[","").replace("]", "");
+        return sortedNumbers;
     }
     public static Stream<Long> formula(long seed) {
         long c = 11L;
