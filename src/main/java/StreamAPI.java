@@ -4,27 +4,33 @@ import java.util.stream.Stream;
 import java.util.List;
 import java.util.Comparator;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 class StreamAPI {
     public static void main(String[] args) {
-        String[] name = {"g","b","a","k","l"};
-        String[] arr = new StreamAPI().arr(name).toArray(new String[0]);
+        //1-2
+        String[] names = {"Ivan", "Peter", "Maria", "John", "Sophia"};
+        String[] formattedNames = formatNames(names);
+        System.out.println(Arrays.toString(formattedNames));
+        //3
         String[] number = {"91, 2, 0", "12, 4, 5"};
         String numbers = new StreamAPI().numbers(number);
-        System.out.println(Arrays.toString(arr));
         System.out.println(numbers);
+        //4
         formula(1234L).limit(10).forEach(System.out::println);
+        //5
         Stream<Integer> stream1 = Stream.of(1, 2, 3, 4, 5);
         Stream<Integer> stream2 = Stream.of(6, 7, 8, 9, 10, 11, 12, 13, 14);
         zip(stream1, stream2).forEach(System.out::println);
+
         }
-    public List<String> arr (String[] odd){
-        List<String> names = Arrays.asList(odd);
-        List<String> arrevers = names.stream()
-                .filter(n -> names.indexOf(n) % 2 == 0)
+    public static String[] formatNames(String[] names) {
+        return IntStream.range(0, names.length)
+                .filter(i -> i % 2 == 0)
+                .mapToObj(i -> (i + 1) + ". " + names[i])
                 .sorted(Comparator.reverseOrder())
-                .collect(Collectors.toList());
-        return arrevers;
+                .toArray(String[]::new);
     }
+
     public String numbers(String[] odd){
         String result = Arrays.stream(odd)
                 .flatMap(s -> Arrays.stream(s.split(", ")))
