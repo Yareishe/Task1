@@ -7,10 +7,13 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 class StreamAPI {
     public static void main(String[] args) {
-        //1-2
-        String[] names = {"Ivan", "Peter", "Maria", "John", "Sophia"};
-        String[] formattedNames = formatNames(names);
-        System.out.println(Arrays.toString(formattedNames));
+        //1
+        String[] names = {"Ivan", "Peter", "John", "Mary"};
+        String oddIndexedNames = new StreamAPI().oddIndexedNames(names);
+        System.out.println(oddIndexedNames);
+        //2
+        String formatNames = new StreamAPI().formatNames(names);
+        System.out.println(formatNames);
         //3
         String[] number = {"91, 2, 0", "12, 4, 5"};
         String numbers = new StreamAPI().numbers(number);
@@ -23,12 +26,19 @@ class StreamAPI {
         zip(stream1, stream2).forEach(System.out::println);
 
         }
-    public static String[] formatNames(String[] names) {
+    public String oddIndexedNames(String[] odd){
+        return IntStream.range(0, odd.length)
+                .filter(i -> i % 2 == 0)
+                .mapToObj(i -> (i + 1) + ". " + odd[i])
+                .collect(Collectors.joining(", "));
+    }
+    public String formatNames(String[] names) {
         return IntStream.range(0, names.length)
                 .filter(i -> i % 2 == 0)
-                .mapToObj(i -> (i + 1) + ". " + names[i])
+                .mapToObj(i -> (i + 1) + ". " + names[i].toUpperCase())
                 .sorted(Comparator.reverseOrder())
-                .toArray(String[]::new);
+                .collect(Collectors.joining(", "));
+
     }
 
     public String numbers(String[] odd){
