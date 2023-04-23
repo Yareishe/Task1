@@ -21,7 +21,7 @@ public class HelloWorld {
         updateUser("10");
         deleteUser("10");
         getUserById("8");
-         getUserByUsername("Bret");
+        getUserByUsername("Bret");
     }
 
     static class User {
@@ -187,7 +187,7 @@ public class HelloWorld {
         String responseBody = in.lines().collect(Collectors.joining());
         List<User> users = gson.fromJson(responseBody, ArrayList.class);
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            System.out.println("npt work");
+            System.out.println("npt work getUsers");
         }
         return users;
     }
@@ -231,11 +231,10 @@ public class HelloWorld {
                             new InputStreamReader(connection.getInputStream()));
             String responseBody = in.lines().collect(Collectors.joining());
             User users = gson.fromJson(responseBody, User.class);
-
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            System.out.println("not work");
+            System.out.println("not work createUser");
         }
-       return users ;
+        return users ;
     }
 
     private static User updateUser(String userId) throws IOException {
@@ -271,16 +270,16 @@ public class HelloWorld {
         }
         int responseCode = connection.getResponseCode();
         System.out.println("PUT response code: " + responseCode);
-            BufferedReader in =
-                    new BufferedReader(
-                            new InputStreamReader(connection.getInputStream()));
-            String responseBody = in.lines().collect(Collectors.joining());
-            User users = gson.fromJson(responseBody, User.class);
-            if (responseCode != HttpURLConnection.HTTP_OK) {
-                System.out.println("not work");
-            }
-            return users ;
+        BufferedReader in =
+                new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
+        String responseBody = in.lines().collect(Collectors.joining());
+        User users = gson.fromJson(responseBody, User.class);
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            System.out.println("not work updateUser");
         }
+        return users ;
+    }
 
     private static void deleteUser(String userId) throws IOException {
         URL url = new URL(TEST_URL + "/" + userId);
@@ -288,7 +287,7 @@ public class HelloWorld {
         connection.setRequestMethod("DELETE");
         int responseCode = connection.getResponseCode();
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            System.out.println("not work");
+            System.out.println("not work deleteUser");
         }
     }
 
@@ -298,17 +297,17 @@ public class HelloWorld {
         connection.setRequestMethod("GET");
         int responseCode = connection.getResponseCode();
         System.out.println("GET response code: " + responseCode);
-            BufferedReader in =
-                    new BufferedReader(
-                            new InputStreamReader(connection.getInputStream()));
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            System.out.println(connection.getResponseMessage());
-            String responseBody = in.lines().collect(Collectors.joining());
-            User users = gson.fromJson(responseBody, User.class);
-            if (responseCode != HttpURLConnection.HTTP_OK) {
-                System.out.println("not work");
-            }
-            return users ;
+        BufferedReader in =
+                new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println(connection.getResponseMessage());
+        String responseBody = in.lines().collect(Collectors.joining());
+        User users = gson.fromJson(responseBody, User.class);
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            System.out.println("not work getUserById");
+        }
+        return users ;
     }
 
     public static List<User> getUserByUsername(String userName) throws IOException {
@@ -317,17 +316,17 @@ public class HelloWorld {
         connection.setRequestMethod("GET");
         int responseCode = connection.getResponseCode();
         System.out.println("GET response code: " + responseCode);
-            BufferedReader in =
-                    new BufferedReader(
-                            new InputStreamReader(connection.getInputStream()));
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            System.out.println(connection.getResponseMessage());
-            String responseBody = in.lines().collect(Collectors.joining());
-            List<User> users = gson.fromJson(responseBody, ArrayList.class);
-            if (responseCode != HttpURLConnection.HTTP_OK) {
-                System.out.println("not work");
-            }
-            return users ;
+        BufferedReader in =
+                new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println(connection.getResponseMessage());
+        String responseBody = in.lines().collect(Collectors.joining());
+        List<User> users = gson.fromJson(responseBody, ArrayList.class);
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            System.out.println("not work getUserByUsername");
+        }
+        return users ;
     }
 
 }
