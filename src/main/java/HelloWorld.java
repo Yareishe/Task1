@@ -21,9 +21,7 @@ public class HelloWorld {
         updateUser("10");
         deleteUser("10");
         getUserById("8");
-        getUserByUsername("Bret");
-        saveCommentsByUserPost("1");
-        createGet("1");
+         getUserByUsername("Bret");
     }
 
     static class User {
@@ -174,183 +172,28 @@ public class HelloWorld {
         }
     }
 
-    static class Comment {
-        private int postId;
-        private int id;
-        private String name;
-        private String email;
-        private String body;
 
-        public int getPostId() {
-            return postId;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public String getBody() {
-            return body;
-        }
-
-        public void setPostId(int postId) {
-            this.postId = postId;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public void setBody(String body) {
-            this.body = body;
-        }
-
-        @Override
-        public String toString() {
-            return "Comment{" +
-                    "postId=" + postId +
-                    ", id=" + id +
-                    ", name=" + name +
-                    ", email=" + email +
-                    ", body='" + body + '\'' +
-                    '}';
-        }
-    }
-
-    static class Post {
-        private int id;
-        private int userId;
-        private String title;
-        private String body;
-
-        public int getId() {
-            return id;
-        }
-
-        public int getUserId() {
-            return userId;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getBody() {
-            return body;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public void setUserId(int userId) {
-            this.userId = userId;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public void setBody(String body) {
-            this.body = body;
-        }
-
-        @Override
-        public String toString() {
-            return "Post{" +
-                    "userId=" + userId +
-                    ", id=" + id +
-                    ", title=" + title +
-                    ", body='" + body + '\'' +
-                    '}';
-        }
-    }
-
-    static class Todo {
-        private int id;
-        private int userId;
-        private String title;
-        private boolean completed;
-
-        public int getId() {
-            return id;
-        }
-
-        public int getUserId() {
-            return userId;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public boolean getCompleted() {
-            return completed;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public void setUserId(int userId) {
-            this.userId = userId;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public void setCompleted(boolean completed) {
-            this.completed = completed;
-        }
-
-        @Override
-        public String toString() {
-            return "Post{" +
-                    "userId=" + userId +
-                    ", id=" + id +
-                    ", title=" + title +
-                    ", completed=" + completed + '\'' +
-                    '}';
-        }
-    }
-    private static void getUsers() throws IOException {
+    private static List<User> getUsers() throws IOException {
         URL url = new URL(TEST_URL);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         int responseCode = connection.getResponseCode();
         System.out.println("GET response code: " + responseCode);
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            BufferedReader in =
-                    new BufferedReader(
-                            new InputStreamReader(connection.getInputStream()));
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            System.out.println(connection.getResponseMessage());
-            String responseBody = in.lines().collect(Collectors.joining());
-            List<User> users = gson.fromJson(responseBody, ArrayList.class);
-            System.out.println(users);
-        } else {
-            System.out.println("GET request not worked");
+        BufferedReader in =
+                new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println(connection.getResponseMessage());
+        String responseBody = in.lines().collect(Collectors.joining());
+        List<User> users = gson.fromJson(responseBody, ArrayList.class);
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            System.out.println("npt work");
         }
+        return users;
     }
 
-    private static void createUser() throws IOException {
+
+    private static User createUser() throws IOException {
         URL url = new URL(TEST_URL);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
@@ -358,29 +201,24 @@ public class HelloWorld {
         connection.setDoOutput(true);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         User user = new User();
-
         user.setName("Vasya");
         user.setId(11);
         user.setUsername("M.S");
         user.setEmail("AAAAA@.email");
         user.setPhone("1234567890");
         user.setWebsite("ffff.net");
-
         User.Address address = new User.Address();
         address.setStreet("xz");
         address.setSuite("Suite 444");
         address.setCity("Kyev");
         address.setZipcode("6666-7777");
-
         User.Address.Geo geo = new User.Address.Geo();
         geo.setLat("34.657544");
         geo.setLng("2882182");
-
         User.Company company = new User.Company();
         company.setName("ttt");
         company.setCatchPhrase("fgdfg - gfdffdsf - dgfdd");
         company.setBs("refre - gfdf");
-
         String userAsString = gson.toJson(user);
         try (OutputStream os = connection.getOutputStream()) {
             byte[] input = userAsString.getBytes(StandardCharsets.UTF_8);
@@ -388,21 +226,19 @@ public class HelloWorld {
         }
         int responseCode = connection.getResponseCode();
         System.out.println("POST response code: " + responseCode);
-
-        if (responseCode == HttpURLConnection.HTTP_CREATED) {
             BufferedReader in =
                     new BufferedReader(
                             new InputStreamReader(connection.getInputStream()));
             String responseBody = in.lines().collect(Collectors.joining());
             User users = gson.fromJson(responseBody, User.class);
-            System.out.println(users);
 
-        } else {
-            System.out.println("POST request not worked");
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            System.out.println("not work");
         }
+       return users ;
     }
 
-    private static void updateUser(String userId) throws IOException {
+    private static User updateUser(String userId) throws IOException {
         URL url = new URL(TEST_URL + "/" + userId);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("PUT");
@@ -410,29 +246,24 @@ public class HelloWorld {
         connection.setDoOutput(true);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         User user = new User();
-
         user.setName("Vasya");
         user.setId(11);
         user.setUsername("M.S");
         user.setEmail("AAAAA@.email");
         user.setPhone("1234567890");
         user.setWebsite("ffff.net");
-
         User.Address address = new User.Address();
         address.setStreet("xz");
         address.setSuite("Suite 444");
         address.setCity("Kyev");
         address.setZipcode("6666-7777");
-
         User.Address.Geo geo = new User.Address.Geo();
         geo.setLat("34.657544");
         geo.setLng("2882182");
-
         User.Company company = new User.Company();
         company.setName("ttt");
         company.setCatchPhrase("fgdfg - gfdffdsf - dgfdd");
         company.setBs("refre - gfdf");
-
         String userAsString = gson.toJson(user);
         try (OutputStream os = connection.getOutputStream()) {
             byte[] input = userAsString.getBytes(StandardCharsets.UTF_8);
@@ -440,79 +271,33 @@ public class HelloWorld {
         }
         int responseCode = connection.getResponseCode();
         System.out.println("PUT response code: " + responseCode);
-
-        if (responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in =
                     new BufferedReader(
                             new InputStreamReader(connection.getInputStream()));
             String responseBody = in.lines().collect(Collectors.joining());
             User users = gson.fromJson(responseBody, User.class);
-            System.out.println(users);
-
-        } else {
-            System.out.println("PUT request not worked");
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                System.out.println("not work");
+            }
+            return users ;
         }
-    }
 
     private static void deleteUser(String userId) throws IOException {
         URL url = new URL(TEST_URL + "/" + userId);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("DELETE");
-        connection.setRequestProperty("Accept", "application/json");
-        connection.setDoOutput(true);
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        User user = new User();
-
-        user.setName("Vasya");
-        user.setId(11);
-        user.setUsername("M.S");
-        user.setEmail("AAAAA@.email");
-        user.setPhone("1234567890");
-        user.setWebsite("ffff.net");
-
-        User.Address address = new User.Address();
-        address.setStreet("xz");
-        address.setSuite("Suite 444");
-        address.setCity("Kyev");
-        address.setZipcode("6666-7777");
-
-        User.Address.Geo geo = new User.Address.Geo();
-        geo.setLat("34.657544");
-        geo.setLng("2882182");
-
-        User.Company company = new User.Company();
-        company.setName("ttt");
-        company.setCatchPhrase("fgdfg - gfdffdsf - dgfdd");
-        company.setBs("refre - gfdf");
-
-        String userAsString = gson.toJson(user);
-        try (OutputStream os = connection.getOutputStream()) {
-            byte[] input = userAsString.getBytes(StandardCharsets.UTF_8);
-            os.write(input, 0, input.length);
-        }
         int responseCode = connection.getResponseCode();
-        System.out.println("DELETE response code: " + responseCode);
-
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            BufferedReader in =
-                    new BufferedReader(
-                            new InputStreamReader(connection.getInputStream()));
-            String responseBody = in.lines().collect(Collectors.joining());
-            User users = gson.fromJson(responseBody, User.class);
-            System.out.println(users);
-
-        } else {
-            System.out.println("DELETE request not worked");
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            System.out.println("not work");
         }
     }
 
-    public static void getUserById(String userId) throws IOException {
+    public static User getUserById(String userId) throws IOException {
         URL url = new URL(TEST_URL + "/" + userId);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         int responseCode = connection.getResponseCode();
         System.out.println("GET response code: " + responseCode);
-        if (responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in =
                     new BufferedReader(
                             new InputStreamReader(connection.getInputStream()));
@@ -520,19 +305,18 @@ public class HelloWorld {
             System.out.println(connection.getResponseMessage());
             String responseBody = in.lines().collect(Collectors.joining());
             User users = gson.fromJson(responseBody, User.class);
-            System.out.println(users);
-        } else {
-            System.out.println("GET request not worked");
-        }
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                System.out.println("not work");
+            }
+            return users ;
     }
 
-    public static void getUserByUsername(String userName) throws IOException {
+    public static List<User> getUserByUsername(String userName) throws IOException {
         URL url = new URL(TEST_URL + "?username=" + userName);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         int responseCode = connection.getResponseCode();
         System.out.println("GET response code: " + responseCode);
-        if (responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in =
                     new BufferedReader(
                             new InputStreamReader(connection.getInputStream()));
@@ -540,93 +324,10 @@ public class HelloWorld {
             System.out.println(connection.getResponseMessage());
             String responseBody = in.lines().collect(Collectors.joining());
             List<User> users = gson.fromJson(responseBody, ArrayList.class);
-            System.out.println(users);
-        } else {
-            System.out.println("GET request not worked");
-        }
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                System.out.println("not work");
+            }
+            return users ;
     }
 
-    private static void saveCommentsByUserPost(String userId) throws IOException {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        int maxId = -1;
-        /////////////////1
-        URL url = new URL("https://jsonplaceholder.typicode.com/users/" + userId + "/posts");
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        int responseCode = connection.getResponseCode();
-        System.out.println("GET1 response code: " + responseCode);
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            BufferedReader in =
-                    new BufferedReader(
-                            new InputStreamReader(connection.getInputStream()));
-            String responseBody = in.lines().collect(Collectors.joining());
-            Post[] posts = gson.fromJson(responseBody, Post[].class);
-            System.out.println(Arrays.toString(posts));
-            for (Post post : posts) {
-                if (post.id > maxId) {
-                    maxId = post.id;
-                }
-            }
-        } else {
-            System.out.println("GET1 request not worked");
-        }
-
-        ///////////////2
-        URL url1 = new URL("https://jsonplaceholder.typicode.com/posts/" + maxId + "/comments");
-        HttpURLConnection connection1 = (HttpURLConnection) url1.openConnection();
-        connection1.setRequestMethod("GET");
-        int responseCode1 = connection1.getResponseCode();
-        System.out.println("GET2 response code: " + responseCode1);
-        List<Comment> comments = null;
-            String responseBody = "";
-        if (responseCode1 == HttpURLConnection.HTTP_OK) {
-            BufferedReader in =
-                    new BufferedReader(
-                            new InputStreamReader(connection1.getInputStream()));
-            responseBody = in.lines().collect(Collectors.joining());
-            comments = gson.fromJson(responseBody, ArrayList.class);
-            System.out.println(comments);
-        } else {
-            System.out.println("GET2 request not worked");
-        }
-        ////////////////3 save to file
-            File file = new File("user-" + userId + "-post-" + maxId+ "-comments.json");
-
-            try(FileWriter writer = new FileWriter(file, false))
-            {
-
-                Object text = responseBody;
-                writer.write((String) text);
-            }
-            catch(IOException ex){
-
-                System.out.println(ex.getMessage());
-            }
-    }
-
-    private static void createGet(String userId) throws IOException {
-        URL url = new URL(TEST_URL +"/"+ userId + "/todos");
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        int responseCode = connection.getResponseCode();
-        System.out.println("GET response code: " + responseCode);
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            BufferedReader in =
-                    new BufferedReader(
-                            new InputStreamReader(connection.getInputStream()));
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            System.out.println(connection.getResponseMessage());
-            String responseBody = in.lines().collect(Collectors.joining());
-            Todo[] todos = gson.fromJson(responseBody, Todo[].class);
-            for (Todo todo : todos) {
-                if (!todo.completed){
-                    System.out.println(todo);
-                }
-            }
-
-        } else {
-            System.out.println("GET request not worked");
-        }
-    }
 }
-
