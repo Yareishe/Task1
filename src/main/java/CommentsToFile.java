@@ -103,18 +103,15 @@ public class CommentsToFile {
         }
     }
     private static String CommentsByUserPost(int maxId, String responseBody) throws IOException {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         URL url1 = new URL("https://jsonplaceholder.typicode.com/posts/" + maxId + "/comments");
         HttpURLConnection connection1 = (HttpURLConnection) url1.openConnection();
         connection1.setRequestMethod("GET");
         int responseCode1 = connection1.getResponseCode();
-        List<Comment> comments = null;
         if (responseCode1 == HttpURLConnection.HTTP_OK) {
             BufferedReader in =
                     new BufferedReader(
                             new InputStreamReader(connection1.getInputStream()));
             responseBody = in.lines().collect(Collectors.joining());
-            comments = gson.fromJson(responseBody, ArrayList.class);
             return responseBody;
         } else {
             return responseBody;
