@@ -231,7 +231,7 @@ public class HelloWorld {
                             new InputStreamReader(connection.getInputStream()));
             String responseBody = in.lines().collect(Collectors.joining());
             User users = gson.fromJson(responseBody, User.class);
-        if (responseCode != HttpURLConnection.HTTP_OK) {
+        if (responseCode != HttpURLConnection.HTTP_CREATED) {
             System.out.println("not work createUser");
         }
         return users ;
