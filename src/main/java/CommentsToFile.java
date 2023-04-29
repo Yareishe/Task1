@@ -13,7 +13,7 @@ public class CommentsToFile {
             "https://jsonplaceholder.typicode.com/users/10/posts";
 
     public static void main(String[] args) throws IOException {
-        String userId = "1";
+        String userId = "2";
         int maxId = -1;
         String responseBody = "";
         responseBody = CommentsByUserPost(MaxID(userId,maxId),responseBody);
