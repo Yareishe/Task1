@@ -23,41 +23,33 @@ public class MyArrayList<T> {
         deliveryCities.get(8);
     }
 
-    boolean add(T value) {
-
+    void add(T value) {
         if (array.length - 1 == filledCount) {
             Object[] array2 = new Object[array.length + 10];
             System.arraycopy(array, 0, array2, 0, array.length);
             array = array2;
         }
-
         array[filledCount] = value;
-
         filledCount++;
-        return true;
     }
 
-    boolean remove(int index) {
+    void remove(int index) {
         Object[] result = new Object[array.length - 2];
         System.arraycopy(array, 0, result, 0, index);
         System.arraycopy(array, index + 1, result, index, array.length - index - 2);
         array = result;
         filledCount--;
-        return true;
     }
 
     void clear() {
         array = new Object[filledCount];
     }
-
     int size() {
         return filledCount;
     }
-
     T get(int index) {
         return (T) array[index];
     }
-
     @Override
     public String toString() {
         return "MyArrayList{" +
