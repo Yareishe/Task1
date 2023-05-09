@@ -1,127 +1,109 @@
-public class MyHashMap<K, V> {
-    public static void main(String[] args) {
-        MyHashMap<Integer, String> deliveryCities = new MyHashMap<>();
-        deliveryCities.clear();
-        deliveryCities.put(0, "Cekago");
-        deliveryCities.put(1, "Cekago1");
-        deliveryCities.put(2, "Cekago2");
-        deliveryCities.put(3, "Cekago3");
-        deliveryCities.put(1, "Cekago4");
-        deliveryCities.remove(0);
-        deliveryCities.put(5, "Cekago5");
-        
+import java.util.Arrays;
+public class MyHashMap {
+    private static final int filledCount = 16;
+    private Node[] array;
+    private int size;
+    public MyHashMap() {
+        this.array = new Node[filledCount];
+        this.size = 0;
     }
-    class Node {
+    public static void main(String[] args) {
+        MyHashMap map = new MyHashMap();
+        map.put("key1", "value1");
+        map.put("key2", "value2");
+        map.put("key3", "value3");
+        System.out.println( map.size());
+        System.out.println(map.get("key1"));
+        map.remove("key2");
+        System.out.println(map.size());
+        map.clear();
+        System.out.println(map.size());
+    }
+    private static class Node {
+        Object key;
+        Object value;
         Node next;
-        K key;
-        V value;
-        public Node(K key, V value) {
+
+        public Node(Object key, Object value) {
             this.key = key;
             this.value = value;
         }
-        public Node(K key) {
-            this.key = key;
+    }
+    public void put(Object key, Object value) {
+        if (key == null) {
+            throw new IllegalArgumentException("Ключ не може бути null");
         }
-        public V getValue() {
-            return value;
-        }
-
-        @Override
-        public String toString() {
-            if (next != null) {
-                return key + "=" + value + ',' + next;
-            } else {
-                return key + "=" + value;
+        int hash = key.hashCode();
+        int index = hash % array.length;
+        for (Node node = array[index]; node != null; node = node.next) {
+            if (node.key.equals(key)) {
+                node.value = value;
+                return;
             }
         }
-    }
-
-    Node root = new Node(null, null);
-
-    public boolean put(K key, V value) {
         Node newNode = new Node(key, value);
-        Node last = root;
-        if(!containsKey(key)) {
-            while (last.next != null) {
-                last = last.next;
+        newNode.next = array[index];
+        array[index] = newNode;
+        size++;
+        if (size > array.length * 0.75) {
+            resize();
+        }
+    }
+    public Object get(Object key) {
+        if (key == null) {
+            throw new IllegalArgumentException("Ключ не може бути null");
+        }
+        int hash = key.hashCode();
+        int index = hash % array.length;
+
+        for (Node node = array[index]; node != null; node = node.next) {
+            if (node.key.equals(key)) {
+                return node.value;
             }
-            last.next = newNode;
-        } else {
-            getNode(key).value = value;
         }
-        return true;
+
+        return null;
     }
 
-    public boolean remove(K key) {
-        Node node = root;
-        Node last = new Node(null, null);
-        Node newNode = node.next;
-        while (newNode != null) {
-            if (newNode.key.equals(key)) {
-                node.next = null;
-                node.next = newNode.next;
-                return true;
+    public void remove(Object key) {
+        if (key == null) {
+            throw new IllegalArgumentException("Ключ не може бути null");
+        }
+        int hash = key.hashCode();
+        int index = hash % array.length;
+        Node prev = null;
+        Node node = array[index];
+        while (node != null) {
+            if (node.key.equals(key)) {
+                if (prev == null) {
+                    array[index] = node.next;
+                } else {
+                    prev.next = node.next;
+                }
+                size--;
+                return;
             }
-            node = newNode;
-            newNode = newNode.next;
+            prev = node;
+            node = node.next;
         }
-        return true;
     }
-
-    void clear() {
-        root = new Node(null);
+    public void clear() {
+        Arrays.fill(array, null);
+        size = 0;
     }
-
-    int size() {
-        Node node = root;
-        int size = 0;
-        while (node.next != null) {
-                size++;
-                node = node.next;
-        }
+    public int size() {
         return size;
     }
+    private void resize() {
+        Node[] oldTable = array;
+        array = new Node[oldTable.length * 2];
+        size = 0;
 
-    boolean containsKey(K key){
-        Node node = root;
-        boolean result = false;
-        while (node.next != null) {
-            node = node.next;
-            if(node.key.equals(key)){
-                result = true;
-                break;
+        for (Node node : oldTable) {
+            while (node != null) {
+                put(node.key, node.value);
+                node = node.next;
             }
         }
-        return result;
-    }
-
-    Node getNode(K key){
-        Node node = root;
-        Node result = null;
-        while (node.next != null) {
-            node = node.next;
-            if(node.key.equals(key)){
-                result = node;
-                break;
-            }
-        }
-        return result;
-    }
-
-    V get(Object key) {
-        Node node = root;
-        V result = null;
-        while (node.next != null) {
-            node = node.next;
-            if(node.key.equals(key)){
-                result = node.value;
-                break;
-            }
-        }
-        return result;
-    }
-    @Override
-    public String toString() {
-        return "{" + root.next + "}";
     }
 }
