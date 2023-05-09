@@ -19,7 +19,7 @@ public class MyArrayList<T> {
         deliveryCities.remove(6);
         System.out.println(deliveryCities);
         deliveryCities.clear();
-        deliveryCities.size();
+        System.out.println(deliveryCities.size());
         deliveryCities.get(8);
     }
 
