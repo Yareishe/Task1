@@ -7,11 +7,10 @@ public class MyHashMap<K, V> {
         deliveryCities.put(2, "Cekago2");
         deliveryCities.put(3, "Cekago3");
         deliveryCities.put(1, "Cekago4");
-
+        deliveryCities.remove(0);
         deliveryCities.put(5, "Cekago5");
-
         System.out.println(deliveryCities.size());
-        System.out.println(deliveryCities.toString());
+        System.out.println("{" + deliveryCities + "}");
     }
     class Node {
         Node next;
@@ -21,18 +20,20 @@ public class MyHashMap<K, V> {
             this.key = key;
             this.value = value;
         }
-
         public Node(K key) {
             this.key = key;
         }
-
         public V getValue() {
             return value;
         }
 
         @Override
         public String toString() {
-            return "{"+ key  + "="+ value +',' + next + "}";
+            if (next != null) {
+                return key + "=" + value + ',' + next;
+            } else {
+                return key + "=" + value;
+            }
         }
     }
 
@@ -53,18 +54,16 @@ public class MyHashMap<K, V> {
     }
 
     public boolean remove(K key) {
-        Node nodeClone = new Node(null);
-        Node last = root;
-        int i = 0;
-        if(!containsKey(key)) {
-            while (last.next != null) {
-                last = last.next;
+        Node node = root;
+        Node newNode = node.next;
+        while (newNode != null) {
+            if (newNode.key.equals(key)) {
+                node.next = newNode.next;
+                return true;
             }
-            last.next = nodeClone;
-        } else {
-            getNode(key).value = null;
+            node = newNode;
+            newNode = newNode.next;
         }
-
         return true;
     }
 
@@ -119,5 +118,9 @@ public class MyHashMap<K, V> {
             }
         }
         return result;
+    }
+    @Override
+    public String toString() {
+        return "{" + root.next + "}";
     }
 }
