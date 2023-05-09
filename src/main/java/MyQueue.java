@@ -34,7 +34,8 @@ public class MyQueue<T> {
     }
 
     void clear() {
-        array = new Object[filledCount];
+        array = new Object[11];
+        filledCount = 0;
     }
 
     int size() {
