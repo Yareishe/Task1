@@ -10,7 +10,6 @@ public class MyLinkedList<F> {
         deliveryCities.add("Cekago4");
         deliveryCities.remove(0);
         deliveryCities.add("Cekago5");
-
         System.out.println(deliveryCities.size());
         System.out.println(deliveryCities.get(5));
     }
@@ -22,7 +21,7 @@ public class MyLinkedList<F> {
             this.data = data;
         }
 
-        public Node clone(Node node) {//needed for delete looping
+        public Node clone(Node node) {
             return new Node(node.getData());
         }
 
