@@ -9,8 +9,7 @@ public class MyHashMap<K, V> {
         deliveryCities.put(1, "Cekago4");
         deliveryCities.remove(0);
         deliveryCities.put(5, "Cekago5");
-        System.out.println(deliveryCities.size());
-        System.out.println("{" + deliveryCities + "}");
+        
     }
     class Node {
         Node next;
