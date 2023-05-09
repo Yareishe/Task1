@@ -55,9 +55,11 @@ public class MyHashMap<K, V> {
 
     public boolean remove(K key) {
         Node node = root;
+        Node last = new Node(null, null);
         Node newNode = node.next;
         while (newNode != null) {
             if (newNode.key.equals(key)) {
+                node.next = null;
                 node.next = newNode.next;
                 return true;
             }
